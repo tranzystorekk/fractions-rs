@@ -3,16 +3,15 @@ use std::ops::{Add, AddAssign, Sub, SubAssign, Neg, Mul, MulAssign, Div, DivAssi
 
 use crate::auxilliary::{lcm, reduce};
 
-#[macro_export]
-macro_rules! frac {
-    ( $n:expr, $d:expr ) => {
-        Fraction::new($n, $d)
-    };
-    ( $n:expr ) => {
-        Fraction::new($n, 1)
-    };
-}
-
+/// Structure representing a rational fraction,
+/// ie. one where the numerator is an integer
+/// and the denominator is a positive integer.
+///
+/// All operations automatically
+/// transform the fraction to its most reduced form,
+/// e.g. 14/24 will become 7/12.
+///
+/// If the fraction is negative, its sign is kept in the numerator.
 #[derive(Debug, Copy, Clone, PartialEq, Eq)]
 pub struct Fraction {
     numerator: i32,
@@ -20,6 +19,11 @@ pub struct Fraction {
 }
 
 impl Fraction {
+    /// Create a new fraction from numerator and denominator.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the denominator is zero.
     pub fn new(numerator: i32, denominator: i32) -> Fraction {
         if denominator == 0 {
             panic!("Fraction cannot have a zero denominator");
@@ -37,11 +41,11 @@ impl Fraction {
         }
     }
 
-    pub fn get_numerator(&self) -> i32 {
+    pub fn numerator(&self) -> i32 {
         self.numerator
     }
 
-    pub fn get_denominator(&self) -> i32 {
+    pub fn denominator(&self) -> i32 {
         self.denominator
     }
 
@@ -49,10 +53,18 @@ impl Fraction {
         (self.numerator, self.denominator)
     }
 
+    /// Returns `true` if the fraction is proper,
+    /// i.e. the absolute value of the numerator
+    /// is lower than the denominator.
     pub fn is_proper(&self) -> bool {
         self.numerator.abs() < self.denominator
     }
 
+    /// Returns a new fraction that is the reverse of this fraction, i.e. 1/f.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the original fraction is a zero.
     pub fn reverse(&self) -> Fraction {
         if self.numerator == 0 {
             panic!("Cannot reverse a zero");
