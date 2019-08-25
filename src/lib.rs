@@ -1,3 +1,5 @@
+mod auxilliary;
+
 #[macro_use]
 mod fractions;
 
