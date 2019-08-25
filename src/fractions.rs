@@ -3,7 +3,7 @@ use std::ops::{Add, AddAssign, Sub, SubAssign, Neg, Mul, MulAssign, Div, DivAssi
 
 use crate::auxilliary::{lcm, reduce};
 
-/// Structure representing a rational fraction,
+/// Structure representing a common fraction,
 /// ie. one where the numerator is an integer
 /// and the denominator is a positive integer.
 ///
@@ -49,6 +49,7 @@ impl Fraction {
         self.denominator
     }
 
+    /// Returns a tuple in the form `(numerator, denominator)`.
     pub fn get_as_tuple(&self) -> (i32, i32) {
         (self.numerator, self.denominator)
     }
@@ -60,12 +61,12 @@ impl Fraction {
         self.numerator.abs() < self.denominator
     }
 
-    /// Returns a new fraction that is the reverse of this fraction, i.e. 1/f.
+    /// Returns a new fraction that is the inverse of this fraction, i.e. 1/f.
     ///
     /// # Panics
     ///
     /// Panics if the original fraction is a zero.
-    pub fn reverse(&self) -> Fraction {
+    pub fn reciprocal(&self) -> Fraction {
         if self.numerator == 0 {
             panic!("Cannot reverse a zero");
         }

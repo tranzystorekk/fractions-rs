@@ -42,22 +42,22 @@ mod tests {
     }
 
     #[test]
-    fn fraction_is_reversed_correctly() {
+    fn fraction_is_inversed_correctly() {
         let f = frac!(3, 5);
 
         let expected_result = frac!(5, 3);
-        assert_eq!(expected_result, f.reverse());
+        assert_eq!(expected_result, f.reciprocal());
 
         let f = frac!(-3, 5);
 
         let expected_result = frac!(-5, 3);
-        assert_eq!(expected_result, f.reverse());
+        assert_eq!(expected_result, f.reciprocal());
     }
 
     #[test]
     #[should_panic]
-    fn fraction_should_panic_when_zero_reversed() {
-        frac!(0).reverse();
+    fn fraction_should_panic_when_zero_inversed() {
+        frac!(0).reciprocal();
     }
 
     #[test]
