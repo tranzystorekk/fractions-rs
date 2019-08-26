@@ -1,4 +1,4 @@
-mod auxilliary;
+mod auxiliary;
 
 mod fractions;
 pub use crate::fractions::Fraction;

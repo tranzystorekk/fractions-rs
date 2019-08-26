@@ -1,7 +1,7 @@
 use std::fmt;
 use std::ops::{Add, AddAssign, Sub, SubAssign, Neg, Mul, MulAssign, Div, DivAssign};
 
-use crate::auxilliary::{lcm, reduce};
+use crate::auxiliary::{lcm, reduce};
 
 /// Structure representing a common fraction,
 /// ie. one where the numerator is an integer
