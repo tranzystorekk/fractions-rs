@@ -30,6 +30,14 @@ pub fn lcm(a: i32, b: i32) -> i32 {
     (a * b) / gcd
 }
 
+pub fn normalize_sign(n: i32, d: i32) -> (i32, i32) {
+    if d < 0 {
+        (-n, -d)
+    } else {
+        (n, d)
+    }
+}
+
 pub fn reduce(a: i32, b:i32) -> (i32, i32) {
     let gcd = gcd(a.abs(), b);
 

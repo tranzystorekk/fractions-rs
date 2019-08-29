@@ -1,7 +1,7 @@
 use std::fmt;
 use std::ops::{Add, AddAssign, Sub, SubAssign, Neg, Mul, MulAssign, Div, DivAssign};
 
-use crate::auxiliary::{lcm, reduce};
+use crate::auxiliary::{lcm, normalize_sign, reduce};
 
 /// Structure representing a common fraction,
 /// ie. one where the numerator is an integer
@@ -29,11 +29,8 @@ impl Fraction {
             panic!("Fraction cannot have a zero denominator");
         }
 
-        let (numerator, denominator) = if denominator < 0 {
-            reduce(-numerator, -denominator)
-        } else {
-            reduce(numerator, denominator)
-        };
+        let (n, d) = normalize_sign(numerator, denominator);
+        let (numerator, denominator) = reduce(n, d);
 
         Fraction {
             numerator,
@@ -71,11 +68,7 @@ impl Fraction {
             panic!("Cannot reverse a zero");
         }
 
-        let (numerator, denominator) = if self.numerator < 0 {
-            (-self.denominator, -self.numerator)
-        } else {
-            (self.denominator, self.numerator)
-        };
+        let (numerator, denominator) = normalize_sign(self.denominator, self.numerator);
 
         Fraction {
             numerator,
