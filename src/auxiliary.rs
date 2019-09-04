@@ -1,45 +1,20 @@
-fn minmax(a: i32, b: i32) -> (i32, i32) {
-    if b < a {
-        (b, a)
-    } else {
-        (a, b)
-    }
-}
+use num::{Integer, Signed};
+use num::integer::gcd;
 
-fn gcd(a: i32, b: i32) -> i32 {
-    if a == 0 || b == 0 {
-        return 1;
-    }
-
-    let (mut lower, mut greater) = minmax(a, b);
-
-    let mut modulo = greater % lower;
-    while modulo != 0 {
-        greater = lower;
-        lower = modulo;
-
-        modulo = greater % lower;
-    }
-
-    lower
-}
-
-pub fn lcm(a: i32, b: i32) -> i32 {
-    let gcd = gcd(a, b);
-
-    (a * b) / gcd
-}
-
-pub fn normalize_sign(n: i32, d: i32) -> (i32, i32) {
-    if d < 0 {
+pub fn normalize_sign<T: Signed>(n: T, d: T) -> (T, T) {
+    if d.is_negative() {
         (-n, -d)
     } else {
         (n, d)
     }
 }
 
-pub fn reduce(a: i32, b:i32) -> (i32, i32) {
-    let gcd = gcd(a.abs(), b);
+pub fn reduce<T: Integer + Copy>(a: T, b: T) -> (T, T) {
+    if a.is_zero() {
+        return (T::zero(), T::one());
+    }
+
+    let gcd = gcd(a, b);
 
     (a / gcd, b / gcd)
 }
