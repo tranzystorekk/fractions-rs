@@ -1,4 +1,6 @@
+use crate::frac;
 use crate::fractions::Fraction;
+use crate::fractions::parse_error::FractionParseErr;
 
 #[test]
 fn fraction_reduces_correctly() {
@@ -56,6 +58,40 @@ fn fraction_is_displayed_correctly() {
 
     let expected_result = "3/13";
     assert_eq!(expected_result, format!("{}", f));
+}
+
+#[test]
+fn fraction_is_parsed_correctly() {
+    let result = "5/17".parse::<Fraction>();
+
+    let expected_result = Some(frac!(5, 17));
+    assert_eq!(expected_result, result.ok());
+}
+
+#[test]
+fn fraction_parse_err_when_incorrect_form() {
+    let result = "5:17".parse::<Fraction>();
+
+    let expected_result = Some(FractionParseErr::IncorrectForm);
+    assert_eq!(expected_result, result.err());
+}
+
+#[test]
+fn fraction_parse_err_when_zero_denominator() {
+    let result = "1/0".parse::<Fraction>();
+
+    let expected_result = Some(FractionParseErr::ZeroDenominator);
+    assert_eq!(expected_result, result.err());
+}
+
+#[test]
+fn fraction_parse_err_when_number_cannot_be_parsed() {
+    let result = "1/eight".parse::<Fraction>();
+
+    let assert_result = result.err()
+        .and_then(FractionParseErr::num_parse_err)
+        .is_some();
+    assert!(assert_result);
 }
 
 #[test]
