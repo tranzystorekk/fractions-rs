@@ -91,7 +91,7 @@ fn fraction_parse_err_when_number_cannot_be_parsed() {
     let assert_result = result.err()
         .and_then(FractionParseErr::num_parse_err)
         .is_some();
-    assert!(assert_result);
+    assert!(assert_result, "Failed numeric parse did not yield a parse err");
 }
 
 #[test]
