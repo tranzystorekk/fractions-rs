@@ -12,19 +12,17 @@ pub enum FractionParseErr<E> {
 impl<E> FractionParseErr<E> {
     /// Returns the underlying parse error (wrapped) if it occurred, `None` otherwise.
     pub fn num_parse_err(self) -> Option<E> {
-        if let FractionParseErr::NumParseErr(err) = self {
-            Some(err)
-        } else {
-            None
+        match self {
+            FractionParseErr::NumParseErr(err) => Some(err),
+            _ => None
         }
     }
 
     /// Returns `true` if an underlying parse error occurred, false otherwise.
     pub fn is_num_parse_err(&self) -> bool {
-        if let FractionParseErr::NumParseErr(_) = self {
-            true
-        } else {
-            false
+        match self {
+            FractionParseErr::NumParseErr(_) => true,
+            _ => false
         }
     }
 }
@@ -44,10 +42,9 @@ impl<E: fmt::Display> fmt::Display for FractionParseErr<E> {
 
 impl<E: Error + 'static> Error for FractionParseErr<E> {
     fn source(&self) -> Option<&(dyn Error + 'static)> {
-        if let FractionParseErr::NumParseErr(err) = self {
-            Some(err)
-        } else {
-            None
+        match self {
+            FractionParseErr::NumParseErr(err) => Some(err),
+            _ => None
         }
     }
 }
