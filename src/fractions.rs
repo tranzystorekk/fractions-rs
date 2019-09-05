@@ -1,3 +1,4 @@
+use std::cmp::Ordering;
 use std::fmt;
 use std::ops::{Add, AddAssign, Sub, SubAssign, Neg, Mul, MulAssign, Div, DivAssign};
 
@@ -111,11 +112,30 @@ impl<T: fmt::Display> fmt::Display for Fraction<T> {
     }
 }
 
-//impl<T, U: Float> Into<U> for Fraction<T> {
-//    fn into(self) -> U {
-//        self.numerator as U / self.denominator as U
-//    }
-//}
+impl<T> From<Fraction<T>> for f32
+    where f32: From<T> {
+
+    fn from(f: Fraction<T>) -> Self {
+        f32::from(f.numerator) / f32::from(f.denominator)
+    }
+}
+
+impl<T> From<Fraction<T>> for f64
+    where f64: From<T> {
+
+    fn from(f: Fraction<T>) -> Self {
+        f64::from(f.numerator) / f64::from(f.denominator)
+    }
+}
+
+impl<T: PartialOrd + Integer + Copy> PartialOrd for Fraction<T> {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        let a = self.numerator * other.denominator;
+        let b = other.numerator * self.denominator;
+
+        a.partial_cmp(&b)
+    }
+}
 
 impl<T: Integer + Signed + Copy> Add for Fraction<T> {
     type Output = Self;

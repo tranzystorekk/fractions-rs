@@ -67,6 +67,15 @@ fn sign_is_transfered_to_numerator() {
 }
 
 #[test]
+fn fractions_can_be_compared() {
+    let f = frac!(3, 4);
+    let g = frac!(5, 6);
+
+    assert_eq!(true, g > f);
+    assert_eq!(false, f > g);
+}
+
+#[test]
 fn fractions_are_added_correctly() {
     let f = frac!(1, 14);
     let g = frac!(3, 35);
