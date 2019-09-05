@@ -95,7 +95,7 @@ fn fraction_parse_err_when_number_cannot_be_parsed() {
 }
 
 #[test]
-fn sign_is_transfered_to_numerator() {
+fn sign_is_transferred_to_numerator() {
     let f = frac!(1, -5);
 
     let expected_equivalent = frac!(-1, 5);
