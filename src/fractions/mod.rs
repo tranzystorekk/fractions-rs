@@ -8,6 +8,7 @@ use std::fmt;
 use std::ops::{Add, AddAssign, Sub, SubAssign, Neg, Mul, MulAssign, Div, DivAssign};
 use std::str::FromStr;
 
+use itertools::Itertools;
 use num::{Integer, Signed, abs};
 use num::integer::lcm;
 
@@ -140,15 +141,12 @@ impl<T: FromStr + Integer> FromStr for Fraction<T> {
     type Err = FractionParseErr<T::Err>;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let parts: Vec<&str> = s.splitn(2, '/').collect();
+        let (n_unparsed, d_unparsed) = s.splitn(2, '/')
+            .collect_tuple().ok_or(FractionParseErr::IncorrectForm)?;
 
-        if parts.len() != 2 {
-            return Err(FractionParseErr::IncorrectForm);
-        }
-
-        let numerator = T::from_str(parts[0])
+        let numerator = T::from_str(n_unparsed)
             .or_else(|err| Err(FractionParseErr::NumParseErr(err)))?;
-        let denominator = T::from_str(parts[1])
+        let denominator = T::from_str(d_unparsed)
             .or_else(|err| Err(FractionParseErr::NumParseErr(err)))?;
 
         if denominator.is_zero() {
