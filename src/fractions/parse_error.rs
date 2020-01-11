@@ -3,47 +3,77 @@ use std::fmt;
 
 /// Defines types of errors that might occur when parsing fractions.
 #[derive(Debug, PartialEq)]
-pub enum FractionParseErr<E> {
+pub enum FractionParseError<E> {
     IncorrectForm,
     ZeroDenominator,
-    NumParseErr(E)
+    NumParseError(E)
 }
 
-impl<E> FractionParseErr<E> {
-    /// Returns the underlying parse error (wrapped) if it occurred, `None` otherwise.
-    pub fn num_parse_err(self) -> Option<E> {
+impl<E> FractionParseError<E> {
+    /// Converts from `FractionParseError<E>` to `Option<E>`.
+    ///
+    /// Converts `self` into an `Option<E>`, consuming `self`,
+    /// and discarding errors other than `NumParseError`
+    pub fn num_parse_error(self) -> Option<E> {
         match self {
-            FractionParseErr::NumParseErr(err) => Some(err),
+            FractionParseError::NumParseError(err) => Some(err),
             _ => None
         }
     }
 
-    /// Returns `true` if an underlying parse error occurred, false otherwise.
-    pub fn is_num_parse_err(&self) -> bool {
+    /// Converts from `&FractionParseError<E>` to `Option<&E>`.
+    ///
+    /// Produces a new `Option`, containing a reference to the `NumParseError` if it occurred,
+    /// leaving the original in place.
+    pub fn as_num_parse_error(&self) -> Option<&E> {
         match self {
-            FractionParseErr::NumParseErr(_) => true,
+            FractionParseError::NumParseError(err) => Some(err),
+            _ => None
+        }
+    }
+
+    /// Returns `true` if an underlying parse error occurred.
+    pub fn is_num_parse_error(&self) -> bool {
+        match self {
+            FractionParseError::NumParseError(_) => true,
+            _ => false
+        }
+    }
+
+    /// Returns `true` if an incorrect form error occurred.
+    pub fn is_incorrect_form(&self) -> bool {
+        match self {
+            FractionParseError::IncorrectForm => true,
+            _ => false
+        }
+    }
+
+    /// Returns `true` if a zero denominator error occurred.
+    pub fn is_zero_denominator(&self) -> bool {
+        match self {
+            FractionParseError::ZeroDenominator => true,
             _ => false
         }
     }
 }
 
-impl<E: fmt::Display> fmt::Display for FractionParseErr<E> {
+impl<E: fmt::Display> fmt::Display for FractionParseError<E> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            FractionParseErr::IncorrectForm =>
+            FractionParseError::IncorrectForm =>
                 write!(f, "Incorrectly formed fraction (format should be <D>/<N>)"),
-            FractionParseErr::ZeroDenominator =>
+            FractionParseError::ZeroDenominator =>
                 write!(f, "Fraction denominator cannot be zero"),
-            FractionParseErr::NumParseErr(err) =>
+            FractionParseError::NumParseError(err) =>
                 write!(f, "Error when parsing fraction: {}", err)
         }
     }
 }
 
-impl<E: Error + 'static> Error for FractionParseErr<E> {
+impl<E: Error + 'static> Error for FractionParseError<E> {
     fn source(&self) -> Option<&(dyn Error + 'static)> {
         match self {
-            FractionParseErr::NumParseErr(err) => Some(err),
+            FractionParseError::NumParseError(err) => Some(err),
             _ => None
         }
     }

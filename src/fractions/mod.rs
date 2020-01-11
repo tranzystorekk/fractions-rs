@@ -13,7 +13,7 @@ use num::{Integer, Signed, abs};
 use num::integer::lcm;
 
 use auxiliary::{normalize_sign, reduce};
-use parse_error::FractionParseErr;
+use parse_error::FractionParseError;
 
 /// Structure representing a common fraction,
 /// ie. one where the numerator is an integer
@@ -138,19 +138,19 @@ impl<T> From<Fraction<T>> for f64
 }
 
 impl<T: FromStr + Integer> FromStr for Fraction<T> {
-    type Err = FractionParseErr<T::Err>;
+    type Err = FractionParseError<T::Err>;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let (n_unparsed, d_unparsed) = s.splitn(2, '/')
-            .collect_tuple().ok_or(FractionParseErr::IncorrectForm)?;
+            .collect_tuple().ok_or(FractionParseError::IncorrectForm)?;
 
         let numerator = T::from_str(n_unparsed)
-            .or_else(|err| Err(FractionParseErr::NumParseErr(err)))?;
+            .map_err(|err| FractionParseError::NumParseError(err))?;
         let denominator = T::from_str(d_unparsed)
-            .or_else(|err| Err(FractionParseErr::NumParseErr(err)))?;
+            .map_err(|err| FractionParseError::NumParseError(err))?;
 
         if denominator.is_zero() {
-            return Err(FractionParseErr::ZeroDenominator);
+            return Err(FractionParseError::ZeroDenominator);
         }
 
         Ok(Fraction::<T> {
