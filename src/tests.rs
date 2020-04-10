@@ -88,10 +88,7 @@ fn fraction_parse_err_when_zero_denominator() {
 fn fraction_parse_err_when_number_cannot_be_parsed() {
     let result = "1/eight".parse::<Fraction>();
 
-    let assert_result = result.err()
-        .and_then(FractionParseError::num_parse_error)
-        .is_some();
-    assert!(assert_result, "Failed numeric parse did not yield a parse err");
+    assert!(matches!(result.unwrap_err(), FractionParseError::NumParseError(_)), "Failed numeric parse did not yield a parse err");
 }
 
 #[test]
