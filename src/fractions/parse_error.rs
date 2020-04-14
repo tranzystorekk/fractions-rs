@@ -34,26 +34,17 @@ impl<E> FractionParseError<E> {
 
     /// Returns `true` if an underlying parse error occurred.
     pub fn is_num_parse_error(&self) -> bool {
-        match self {
-            FractionParseError::NumParseError(_) => true,
-            _ => false
-        }
+        matches!(self, FractionParseError::NumParseError(_))
     }
 
     /// Returns `true` if an incorrect form error occurred.
     pub fn is_incorrect_form(&self) -> bool {
-        match self {
-            FractionParseError::IncorrectForm => true,
-            _ => false
-        }
+        matches!(self, FractionParseError::IncorrectForm)
     }
 
     /// Returns `true` if a zero denominator error occurred.
     pub fn is_zero_denominator(&self) -> bool {
-        match self {
-            FractionParseError::ZeroDenominator => true,
-            _ => false
-        }
+        matches!(self, FractionParseError::ZeroDenominator)
     }
 }
 
