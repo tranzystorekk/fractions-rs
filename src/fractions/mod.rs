@@ -145,9 +145,9 @@ impl<T: FromStr + Integer> FromStr for Fraction<T> {
             .collect_tuple().ok_or(FractionParseError::IncorrectForm)?;
 
         let numerator = T::from_str(n_unparsed)
-            .map_err(|err| FractionParseError::NumParseError(err))?;
+            .map_err(FractionParseError::NumParseError)?;
         let denominator = T::from_str(d_unparsed)
-            .map_err(|err| FractionParseError::NumParseError(err))?;
+            .map_err(FractionParseError::NumParseError)?;
 
         if denominator.is_zero() {
             return Err(FractionParseError::ZeroDenominator);
