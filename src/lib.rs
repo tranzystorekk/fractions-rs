@@ -1,6 +1,6 @@
 mod fractions;
-pub use crate::fractions::Fraction;
 pub use crate::fractions::parse_error::FractionParseError;
+pub use crate::fractions::Fraction;
 
 pub type Fraction8 = Fraction<i8>;
 pub type Fraction16 = Fraction<i16>;

@@ -6,7 +6,7 @@ use std::fmt;
 pub enum FractionParseError<E> {
     IncorrectForm,
     ZeroDenominator,
-    NumParseError(E)
+    NumParseError(E),
 }
 
 impl<E> FractionParseError<E> {
@@ -17,7 +17,7 @@ impl<E> FractionParseError<E> {
     pub fn num_parse_error(self) -> Option<E> {
         match self {
             FractionParseError::NumParseError(err) => Some(err),
-            _ => None
+            _ => None,
         }
     }
 
@@ -28,7 +28,7 @@ impl<E> FractionParseError<E> {
     pub fn as_num_parse_error(&self) -> Option<&E> {
         match self {
             FractionParseError::NumParseError(err) => Some(err),
-            _ => None
+            _ => None,
         }
     }
 
@@ -51,12 +51,13 @@ impl<E> FractionParseError<E> {
 impl<E: fmt::Display> fmt::Display for FractionParseError<E> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            FractionParseError::IncorrectForm =>
-                write!(f, "Incorrectly formed fraction (format should be <D>/<N>)"),
-            FractionParseError::ZeroDenominator =>
-                write!(f, "Fraction denominator cannot be zero"),
-            FractionParseError::NumParseError(err) =>
+            FractionParseError::IncorrectForm => {
+                write!(f, "Incorrectly formed fraction (format should be <D>/<N>)")
+            }
+            FractionParseError::ZeroDenominator => write!(f, "Fraction denominator cannot be zero"),
+            FractionParseError::NumParseError(err) => {
                 write!(f, "Error when parsing fraction: {}", err)
+            }
         }
     }
 }
@@ -65,7 +66,7 @@ impl<E: Error + 'static> Error for FractionParseError<E> {
     fn source(&self) -> Option<&(dyn Error + 'static)> {
         match self {
             FractionParseError::NumParseError(err) => Some(err),
-            _ => None
+            _ => None,
         }
     }
 }

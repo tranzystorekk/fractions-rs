@@ -5,12 +5,12 @@ pub mod parse_error;
 
 use std::cmp::Ordering;
 use std::fmt;
-use std::ops::{Add, AddAssign, Sub, SubAssign, Neg, Mul, MulAssign, Div, DivAssign};
+use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Sub, SubAssign};
 use std::str::FromStr;
 
 use itertools::Itertools;
-use num::{Integer, Signed, abs};
 use num::integer::lcm;
+use num::{abs, Integer, Signed};
 
 use auxiliary::{normalize_sign, reduce};
 use parse_error::FractionParseError;
@@ -27,7 +27,7 @@ use parse_error::FractionParseError;
 #[derive(Debug, Copy, Clone, PartialEq, Eq)]
 pub struct Fraction<T = i32> {
     numerator: T,
-    denominator: T
+    denominator: T,
 }
 
 impl<T: Integer + Signed + Copy> Fraction<T> {
@@ -46,7 +46,7 @@ impl<T: Integer + Signed + Copy> Fraction<T> {
 
         Fraction::<T> {
             numerator,
-            denominator
+            denominator,
         }
     }
 
@@ -84,7 +84,7 @@ impl<T: Integer + Signed + Copy> Fraction<T> {
 
         Fraction::<T> {
             numerator,
-            denominator
+            denominator,
         }
     }
 }
@@ -107,11 +107,17 @@ impl<T: Integer + Signed + Copy> Fraction<T> {
     }
 
     fn mul_impl(&self, other: &Self) -> (T, T) {
-        reduce(self.numerator * other.numerator, self.denominator * other.denominator)
+        reduce(
+            self.numerator * other.numerator,
+            self.denominator * other.denominator,
+        )
     }
 
     fn div_impl(&self, other: &Self) -> (T, T) {
-        reduce(self.numerator * other.denominator, self.denominator * other.numerator)
+        reduce(
+            self.numerator * other.denominator,
+            self.denominator * other.numerator,
+        )
     }
 }
 
@@ -122,16 +128,18 @@ impl<T: fmt::Display> fmt::Display for Fraction<T> {
 }
 
 impl<T> From<Fraction<T>> for f32
-    where f32: From<T> {
-
+where
+    f32: From<T>,
+{
     fn from(f: Fraction<T>) -> Self {
         f32::from(f.numerator) / f32::from(f.denominator)
     }
 }
 
 impl<T> From<Fraction<T>> for f64
-    where f64: From<T> {
-
+where
+    f64: From<T>,
+{
     fn from(f: Fraction<T>) -> Self {
         f64::from(f.numerator) / f64::from(f.denominator)
     }
@@ -141,13 +149,13 @@ impl<T: FromStr + Integer> FromStr for Fraction<T> {
     type Err = FractionParseError<T::Err>;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let (n_unparsed, d_unparsed) = s.splitn(2, '/')
-            .collect_tuple().ok_or(FractionParseError::IncorrectForm)?;
+        let (n_unparsed, d_unparsed) = s
+            .splitn(2, '/')
+            .collect_tuple()
+            .ok_or(FractionParseError::IncorrectForm)?;
 
-        let numerator = T::from_str(n_unparsed)
-            .map_err(FractionParseError::NumParseError)?;
-        let denominator = T::from_str(d_unparsed)
-            .map_err(FractionParseError::NumParseError)?;
+        let numerator = T::from_str(n_unparsed).map_err(FractionParseError::NumParseError)?;
+        let denominator = T::from_str(d_unparsed).map_err(FractionParseError::NumParseError)?;
 
         if denominator.is_zero() {
             return Err(FractionParseError::ZeroDenominator);
@@ -155,7 +163,7 @@ impl<T: FromStr + Integer> FromStr for Fraction<T> {
 
         Ok(Fraction::<T> {
             numerator,
-            denominator
+            denominator,
         })
     }
 }
@@ -177,7 +185,7 @@ impl<T: Integer + Signed + Copy> Add for Fraction<T> {
 
         Fraction::<T> {
             numerator,
-            denominator
+            denominator,
         }
     }
 }
@@ -188,7 +196,7 @@ impl<T: Integer + Signed + Copy> AddAssign for Fraction<T> {
 
         *self = Self {
             numerator,
-            denominator
+            denominator,
         };
     }
 }
@@ -201,7 +209,7 @@ impl<T: Integer + Signed + Copy> Sub for Fraction<T> {
 
         Fraction::<T> {
             numerator,
-            denominator
+            denominator,
         }
     }
 }
@@ -212,7 +220,7 @@ impl<T: Integer + Signed + Copy> SubAssign for Fraction<T> {
 
         *self = Self {
             numerator,
-            denominator
+            denominator,
         }
     }
 }
@@ -236,7 +244,7 @@ impl<T: Integer + Signed + Copy> Mul for Fraction<T> {
 
         Fraction::<T> {
             numerator,
-            denominator
+            denominator,
         }
     }
 }
@@ -247,7 +255,7 @@ impl<T: Integer + Signed + Copy> MulAssign for Fraction<T> {
 
         *self = Self {
             numerator,
-            denominator
+            denominator,
         }
     }
 }
@@ -264,7 +272,7 @@ impl<T: Integer + Signed + Copy> Div for Fraction<T> {
 
         Fraction::<T> {
             numerator,
-            denominator
+            denominator,
         }
     }
 }
@@ -279,7 +287,7 @@ impl<T: Integer + Signed + Copy> DivAssign for Fraction<T> {
 
         *self = Self {
             numerator,
-            denominator
+            denominator,
         }
     }
 }

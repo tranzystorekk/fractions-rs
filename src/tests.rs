@@ -1,6 +1,6 @@
 use crate::frac;
-use crate::fractions::Fraction;
 use crate::fractions::parse_error::FractionParseError;
+use crate::fractions::Fraction;
 
 #[test]
 fn fraction_reduces_correctly() {
@@ -88,7 +88,10 @@ fn fraction_parse_err_when_zero_denominator() {
 fn fraction_parse_err_when_number_cannot_be_parsed() {
     let result = "1/eight".parse::<Fraction>();
 
-    assert!(matches!(result.unwrap_err(), FractionParseError::NumParseError(_)), "Failed numeric parse did not yield a parse err");
+    assert!(
+        matches!(result.unwrap_err(), FractionParseError::NumParseError(_)),
+        "Failed numeric parse did not yield a parse err"
+    );
 }
 
 #[test]
@@ -152,7 +155,7 @@ fn fractions_are_divided_correctly() {
     assert_eq!(expected_result, f / g);
 }
 
-#[allow(unused_must_use)]
+#[allow(unused_must_use, clippy::no_effect)]
 #[test]
 #[should_panic]
 fn fraction_should_panic_when_divided_by_zero() {

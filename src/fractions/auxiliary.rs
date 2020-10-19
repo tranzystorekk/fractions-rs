@@ -1,5 +1,5 @@
-use num::{Integer, Signed};
 use num::integer::gcd;
+use num::{Integer, Signed};
 
 pub fn normalize_sign<T: Signed>(n: T, d: T) -> (T, T) {
     if d.is_negative() {
@@ -15,6 +15,5 @@ pub fn reduce<T: Integer + Copy>(a: T, b: T) -> (T, T) {
     }
 
     let gcd = gcd(a, b);
-
     (a / gcd, b / gcd)
 }
